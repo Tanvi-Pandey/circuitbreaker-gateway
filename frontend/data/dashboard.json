@@ -1,0 +1,60 @@
+{
+  "projectName": "CircuitBreaker Gateway",
+  "overallStatus": "DEMO RUNNING",
+  "summaryCards": [
+    { "label": "Services", "value": "5" },
+    { "label": "Gateway", "value": "8080" },
+    { "label": "Eureka", "value": "8761" },
+    { "label": "Mode", "value": "Local" }
+  ],
+  "flow": [
+    "Client",
+    "API Gateway",
+    "Discovery",
+    "Product",
+    "Inventory",
+    "Recommendation"
+  ],
+  "services": [
+    {
+      "key": "eureka",
+      "name": "Eureka Server",
+      "port": "8761",
+      "type": "Registry",
+      "status": "UP",
+      "description": "Tracks and discovers all running microservices."
+    },
+    {
+      "key": "gateway",
+      "name": "API Gateway",
+      "port": "8080",
+      "type": "Gateway",
+      "status": "UP",
+      "description": "Routes incoming requests to product, inventory, and recommendation services."
+    },
+    {
+      "key": "products",
+      "name": "Product Service",
+      "port": "8081",
+      "type": "Backend",
+      "status": "UP",
+      "description": "Serves the product catalog and top seller data."
+    },
+    {
+      "key": "inventory",
+      "name": "Inventory Service",
+      "port": "8082",
+      "type": "Backend",
+      "status": "UP",
+      "description": "Returns stock levels per product."
+    },
+    {
+      "key": "recommendation",
+      "name": "Recommendation Service",
+      "port": "8083",
+      "type": "Backend",
+      "status": "UP",
+      "description": "Returns recommendations and simulates the slow overload path."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CircuitCart</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="nav container">
+        <div class="brand">
+          <span class="brand-mark">C</span>
+          <span>CircuitCart</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#products">Products</a>
+          <a href="#recommendations">Recommended</a>
+          <a href="#status">System Status</a>
+        </nav>
+        <button class="cart-btn">Cart (0)</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero" id="home">
+        <div>
+          <p class="eyebrow">Smart store demo</p>
+          <h1 id="store-name">Loading store...</h1>
+          <p class="tagline" id="store-tagline">Loading message...</p>
+          <div class="hero-actions">
+            <button class="primary-btn">Shop now</button>
+            <button class="secondary-btn">View deals</button>
+          </div>
+        </div>
+        <div class="promo-box" id="promo-box">Loading promotion...</div>
+      </section>
+
+      <section class="status-strip" id="status">
+        <div class="status-card">
+          <span class="status-label">Eureka</span>
+          <strong id="eureka-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Gateway</span>
+          <strong id="gateway-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Catalog</span>
+          <strong id="products-status">Checking...</strong>
+        </div>
+      </section>
+
+      <section class="section-header" id="products">
+        <h2>Featured Products</h2>
+        <span>Top picks selected by the backend</span>
+      </section>
+      <section id="product-grid" class="product-grid"></section>
+
+      <section class="section-header" id="recommendations">
+        <h2>Recommended for you</h2>
+        <span>Based on user U100</span>
+      </section>
+      <section id="recommendation-box" class="recommendation-box"></section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

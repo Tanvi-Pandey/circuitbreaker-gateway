@@ -1,0 +1,52 @@
+{
+  "storeName": "CircuitCart",
+  "tagline": "Smart shopping powered by microservices",
+  "banner": "Black Friday deals are live",
+  "products": [
+    {
+      "id": "P001",
+      "name": "Wireless Earbuds Pro",
+      "category": "Electronics",
+      "price": 2499.0,
+      "stock": 142,
+      "topSeller": true,
+      "image": "🎧"
+    },
+    {
+      "id": "P002",
+      "name": "Running Shoes v3",
+      "category": "Footwear",
+      "price": 3299.0,
+      "stock": 58,
+      "topSeller": true,
+      "image": "👟"
+    },
+    {
+      "id": "P003",
+      "name": "Smart Watch Lite",
+      "category": "Electronics",
+      "price": 4999.0,
+      "stock": 0,
+      "topSeller": false,
+      "image": "⌚"
+    },
+    {
+      "id": "P004",
+      "name": "Ceramic Coffee Mug",
+      "category": "Home",
+      "price": 399.0,
+      "stock": 310,
+      "topSeller": false,
+      "image": "☕"
+    },
+    {
+      "id": "P005",
+      "name": "Yoga Mat XL",
+      "category": "Fitness",
+      "price": 899.0,
+      "stock": 76,
+      "topSeller": true,
+      "image": "🧘"
+    }
+  ]
+}
