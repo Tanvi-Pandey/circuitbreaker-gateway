@@ -1,0 +1,59 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # Also allows calling a service directly as /PRODUCT-SERVICE/api/products
+          # for quick debugging, in addition to the explicit routes below.
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: product-service-route
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/gateway/products/**
+          filters:
+            - RewritePath=/gateway/products/(?<segment>.*), /api/products/$\{segment}
+            - RewritePath=/gateway/products, /api/products
+
+        - id: inventory-service-route
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/gateway/inventory/**
+          filters:
+            - RewritePath=/gateway/inventory/(?<segment>.*), /api/inventory/$\{segment}
+            - RewritePath=/gateway/inventory, /api/inventory
+
+        - id: recommendation-service-route
+          uri: lb://RECOMMENDATION-SERVICE
+          predicates:
+            - Path=/gateway/recommendations/**
+          filters:
+            - RewritePath=/gateway/recommendations/(?<segment>.*), /api/recommendations/$\{segment}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
