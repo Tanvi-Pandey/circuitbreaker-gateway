@@ -1,0 +1,21 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    # This IS the registry, so it doesn't need to register with itself or fetch a registry.
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    # Fine for local/dev demos: don't wait 90s for stale-instance eviction. Turn OFF in production.
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000
+
+logging:
+  level:
+    com.netflix.eureka: WARN
+    com.netflix.discovery: WARN
