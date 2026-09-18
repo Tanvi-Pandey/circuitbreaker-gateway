@@ -1,3 +1,19 @@
+resilience4j:
+  circuitbreaker:
+    instances:
+      recommendationCB:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+  timelimiter:
+    instances:
+      recommendationCB:
+        timeout-duration: 3s
+
 server:
   port: 8080
 
@@ -35,7 +51,10 @@ spring:
             - Path=/gateway/recommendations/**
           filters:
             - RewritePath=/gateway/recommendations/(?<segment>.*), /api/recommendations/$\{segment}
-
+            - name: CircuitBreaker
+              args:
+                name: recommendationCB
+                
 eureka:
   client:
     service-url:
@@ -47,7 +66,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,gateway
+        include: health,info,gateway,circuitbreakers,circuitbreakerevents
   endpoint:
     health:
       show-details: always
