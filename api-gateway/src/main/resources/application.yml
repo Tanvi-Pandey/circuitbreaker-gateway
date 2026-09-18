@@ -55,6 +55,10 @@ spring:
               args:
                 name: recommendationCB
                 
+            - name: CircuitBreaker
+              args:
+                name: recommendationCB
+                fallbackUri: forward:/fallback/recommendations       
 eureka:
   client:
     service-url:
