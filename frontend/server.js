@@ -15,6 +15,8 @@ const BACKEND_TARGETS = {
   recommendation: 'http://localhost:8083/api/recommendations/U100'
 };
 
+const CIRCUIT_BREAKER_URL = 'http://localhost:8080/actuator/circuitbreakers';
+
 function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(payload, null, 2));
@@ -72,6 +74,35 @@ function proxyToBackend(url, res) {
   });
 }
 
+function proxyCircuitBreakerState(res) {
+  const target = new URL(CIRCUIT_BREAKER_URL);
+
+  const request = http.get(target, (backendRes) => {
+    let body = '';
+
+    backendRes.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    backendRes.on('end', () => {
+      try {
+        const json = JSON.parse(body);
+        const breaker = (json.circuitBreakers || []).find((cb) => cb.name === 'recommendationCB');
+        sendJson(res, 200, {
+          status: breaker ? breaker.state : 'UNKNOWN',
+          payload: breaker || null
+        });
+      } catch (error) {
+        sendJson(res, 502, { status: 'UNKNOWN', message: 'Could not parse circuit breaker response' });
+      }
+    });
+  });
+
+  request.on('error', () => {
+    sendJson(res, 503, { status: 'UNKNOWN', message: 'Gateway actuator unreachable' });
+  });
+}
+
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://localhost:' + PORT);
 
@@ -94,6 +125,11 @@ const server = http.createServer((req, res) => {
       }
       sendJson(res, 200, JSON.parse(data));
     });
+    return;
+  }
+
+  if (url.pathname === '/api/circuit-breaker') {
+    proxyCircuitBreakerState(res);
     return;
   }
 

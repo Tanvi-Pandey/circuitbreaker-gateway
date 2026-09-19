@@ -55,7 +55,9 @@ async function updateServiceStatus() {
   const services = [
     { key: 'eureka', id: 'eureka-status' },
     { key: 'gateway', id: 'gateway-status' },
-    { key: 'products', id: 'products-status' }
+    { key: 'products', id: 'products-status' },
+    { key: 'inventory', id: 'inventory-status' },
+    { key: 'recommendation', id: 'recommendation-status' }
   ];
 
   for (const service of services) {
@@ -72,7 +74,26 @@ async function updateServiceStatus() {
       element.style.color = '#dc2626';
     }
   }
+
+  await updateCircuitBreakerStatus();
+}
+
+async function updateCircuitBreakerStatus() {
+  const element = document.getElementById('circuitbreaker-status');
+  try {
+    const res = await fetch('/api/circuit-breaker');
+    const payload = await res.json();
+    const state = payload.status || 'UNKNOWN';
+    element.textContent = state;
+    element.style.color =
+      state === 'CLOSED' ? '#16a34a' :
+      state === 'HALF_OPEN' ? '#d97706' :
+      state === 'OPEN' ? '#dc2626' : '#6b7280';
+  } catch (error) {
+    element.textContent = 'UNKNOWN';
+    element.style.color = '#6b7280';
+  }
 }
 
 window.addEventListener('DOMContentLoaded', loadStore);
-
+setInterval(updateServiceStatus, 5000);
