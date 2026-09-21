@@ -16,6 +16,7 @@ const BACKEND_TARGETS = {
 };
 
 const CIRCUIT_BREAKER_URL = 'http://localhost:8080/actuator/circuitbreakers';
+const CHAOS_SLOW_URL = 'http://localhost:8080/gateway/recommendations/U100/slow?delayMs=6000';
 
 function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, { 'Content-Type': 'application/json' });
@@ -103,6 +104,40 @@ function proxyCircuitBreakerState(res) {
   });
 }
 
+// Fires one slow call at the recommendation route through the Gateway.
+// Used by the dashboard's "Trigger Chaos" button so a reviewer can generate
+// failing calls without opening Postman or a second terminal.
+function triggerChaosCall(res) {
+  const target = new URL(CHAOS_SLOW_URL);
+  const startedAt = Date.now();
+
+  const request = http.get(target, (backendRes) => {
+    let body = '';
+
+    backendRes.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    backendRes.on('end', () => {
+      sendJson(res, 200, {
+        triggered: true,
+        httpStatus: backendRes.statusCode,
+        elapsedMs: Date.now() - startedAt,
+        note: 'Check the Circuit Breaker card above — repeated triggers should eventually flip it to OPEN.'
+      });
+    });
+  });
+
+  request.on('error', (err) => {
+    sendJson(res, 200, {
+      triggered: true,
+      httpStatus: null,
+      elapsedMs: Date.now() - startedAt,
+      note: 'Call failed at the network level: ' + err.message
+    });
+  });
+}
+
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://localhost:' + PORT);
 
@@ -130,6 +165,11 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === '/api/circuit-breaker') {
     proxyCircuitBreakerState(res);
+    return;
+  }
+
+  if (url.pathname === '/api/chaos/trigger' && req.method === 'POST') {
+    triggerChaosCall(res);
     return;
   }
 

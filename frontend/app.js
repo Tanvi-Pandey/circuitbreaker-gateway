@@ -95,5 +95,30 @@ async function updateCircuitBreakerStatus() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', loadStore);
+function setupChaosButton() {
+  const button = document.getElementById('chaos-trigger-btn');
+  const result = document.getElementById('chaos-result');
+
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    result.textContent = 'Firing slow call at recommendation route...';
+
+    try {
+      const res = await fetch('/api/chaos/trigger', { method: 'POST' });
+      const payload = await res.json();
+      result.textContent = `HTTP ${payload.httpStatus} in ${payload.elapsedMs}ms — ${payload.note}`;
+    } catch (error) {
+      result.textContent = 'Trigger request failed: ' + error.message;
+    } finally {
+      button.disabled = false;
+      updateCircuitBreakerStatus();
+    }
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadStore();
+  setupChaosButton();
+});
+
 setInterval(updateServiceStatus, 5000);

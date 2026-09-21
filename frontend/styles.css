@@ -320,3 +320,28 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+.chaos-panel {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px dashed #dc2626;
+  border-radius: 8px;
+  background: #fef2f2;
+}
+
+.chaos-panel h3 {
+  margin: 0 0 6px;
+  color: #991b1b;
+}
+
+.chaos-panel p {
+  margin: 0 0 12px;
+  color: #7f1d1d;
+  font-size: 0.9rem;
+}
+
+#chaos-result {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #374151;
+}

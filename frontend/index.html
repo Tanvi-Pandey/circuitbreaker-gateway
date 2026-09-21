@@ -64,6 +64,42 @@
         </div>
       </section>
 
+            <section class="status-strip" id="status">
+        <div class="status-card">
+          <span class="status-label">Eureka</span>
+          <strong id="eureka-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Gateway</span>
+          <strong id="gateway-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Catalog</span>
+          <strong id="products-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Inventory</span>
+          <strong id="inventory-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Recommendation</span>
+          <strong id="recommendation-status">Checking...</strong>
+        </div>
+        <div class="status-card">
+          <span class="status-label">Circuit Breaker</span>
+          <strong id="circuitbreaker-status">Checking...</strong>
+        </div>
+      </section>
+
+      <section class="chaos-panel" id="chaos">
+        <div>
+          <h3>Chaos Simulation</h3>
+          <p>Fires a slow call at the recommendation route through the Gateway. Click it repeatedly (or stop recommendation-service first) to trip the circuit breaker above.</p>
+        </div>
+        <button id="chaos-trigger-btn" class="primary-btn">Trigger Chaos Call</button>
+        <p id="chaos-result"></p>
+      </section>
+
       <section class="section-header" id="products">
         <h2>Featured Products</h2>
         <span>Top picks selected by the backend</span>
